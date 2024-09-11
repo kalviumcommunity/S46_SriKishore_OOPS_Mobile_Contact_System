@@ -1,6 +1,5 @@
 import java.util.Scanner;
 
-
 class Contact {
     private String name;
     private String phoneNumber;
@@ -15,7 +14,7 @@ class Contact {
     }
 
     public String getName() {
-        return this.name;  
+        return this.name;
     }
 
     public String getPhoneNumber() {
@@ -34,7 +33,7 @@ class Contact {
         System.out.println("=====================================");
         System.out.println("Contact Details:");
         System.out.println("=====================================");
-        System.out.printf("Name: %-25s\n", this.name);  
+        System.out.printf("Name: %-25s\n", this.name);
         System.out.printf("Phone Number: %-25s\n", this.phoneNumber);
         System.out.printf("Email: %-25s\n", this.email);
         if (this.altName != null && !this.altName.isEmpty()) {
@@ -44,46 +43,14 @@ class Contact {
     }
 }
 
-class ContactManager {
-    private Contact[] contacts;  
-    private int contactCount;
-
-    public ContactManager(int size) {
-        contacts = new Contact[size];
-        contactCount = 0;
-    }
-
-    public void addContact(Contact contact) {
-        if (contactCount < contacts.length) {
-            contacts[contactCount] = contact;
-            contactCount++;
-            System.out.println("Contact added: " + contact.getName());
-        } else {
-            System.out.println("Contact list is full!");
-        }
-    }
-
-    public void displayAllContacts() {
-        if (contactCount == 0) {
-            System.out.println("No contacts available.");
-        } else {
-            System.out.println("\n===== List of All Contacts =====\n");
-            for (int i = 0; i < contactCount; i++) {
-                contacts[i].displayContact();
-                System.out.println(); 
-            }
-        }
-    }
-}
-
 public class ContactApp {
     public static void main(String[] args) {
-        ContactManager contactManager = new ContactManager(10);
-
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("How many contacts do you want to add? ");
         int numContacts = Integer.parseInt(scanner.nextLine());
+
+        Contact[] contacts = new Contact[numContacts];
 
         for (int i = 0; i < numContacts; i++) {
             System.out.println("\nEnter details for contact " + (i + 1) + ":");
@@ -99,13 +66,13 @@ public class ContactApp {
 
             System.out.print("Enter Alternative Name (optional): ");
             String altName = scanner.nextLine(); 
-
-            Contact contact = new Contact(name, phoneNumber, email, altName);
-
-            contactManager.addContact(contact);
+            contacts[i] = new Contact(name, phoneNumber, email, altName);
         }
 
-        contactManager.displayAllContacts();
+        System.out.println("\nDisplaying all contacts:");
+        for (Contact contact : contacts) {
+            contact.displayContact();
+        }
 
         scanner.close();
     }
