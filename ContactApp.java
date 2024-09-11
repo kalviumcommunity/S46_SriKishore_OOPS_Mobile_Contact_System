@@ -1,50 +1,51 @@
 import java.util.Scanner;
 
+
 class Contact {
     private String name;
     private String phoneNumber;
     private String email;
-    private String altName;
+    private String altName; 
 
     public Contact(String name, String phoneNumber, String email, String altName) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.altName = altName;
+        this.altName = altName; 
     }
 
     public String getName() {
-        return name;
+        return this.name;  
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return this.phoneNumber;
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public String getAltName() {
-        return altName;
+        return this.altName;
     }
 
     public void displayContact() {
         System.out.println("=====================================");
         System.out.println("Contact Details:");
         System.out.println("=====================================");
-        System.out.printf("Name: %-25s\n", name);
-        System.out.printf("Phone Number: %-25s\n", phoneNumber);
-        System.out.printf("Email: %-25s\n", email);
-        if (altName != null && !altName.isEmpty()) {
-            System.out.printf("Alternative Name: %-25s\n", altName);
+        System.out.printf("Name: %-25s\n", this.name);  
+        System.out.printf("Phone Number: %-25s\n", this.phoneNumber);
+        System.out.printf("Email: %-25s\n", this.email);
+        if (this.altName != null && !this.altName.isEmpty()) {
+            System.out.printf("Alternative Name: %-25s\n", this.altName);
         }
         System.out.println("=====================================");
     }
 }
 
 class ContactManager {
-    private Contact[] contacts;
+    private Contact[] contacts;  
     private int contactCount;
 
     public ContactManager(int size) {
@@ -69,7 +70,7 @@ class ContactManager {
             System.out.println("\n===== List of All Contacts =====\n");
             for (int i = 0; i < contactCount; i++) {
                 contacts[i].displayContact();
-                System.out.println();
+                System.out.println(); 
             }
         }
     }
@@ -97,7 +98,7 @@ public class ContactApp {
             String email = scanner.nextLine();
 
             System.out.print("Enter Alternative Name (optional): ");
-            String altName = scanner.nextLine();
+            String altName = scanner.nextLine(); 
 
             Contact contact = new Contact(name, phoneNumber, email, altName);
 
