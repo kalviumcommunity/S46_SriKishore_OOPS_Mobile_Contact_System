@@ -27,13 +27,22 @@ class Contact {
         }
     }
 
-    // Static methods to get the counts
+    // Static method to get the total count of contacts
     public static int getTotalContacts() {
         return totalContacts;
     }
 
+    // Static method to get the count of contacts with an alternative name
     public static int getContactsWithAltName() {
         return contactsWithAltName;
+    }
+
+    // Static member function to calculate the percentage of contacts with alternative names
+    public static double calculateAltNamePercentage() {
+        if (totalContacts == 0) {
+            return 0.0;
+        }
+        return (contactsWithAltName * 100.0) / totalContacts;
     }
 
     // Method to display contact details
@@ -88,11 +97,12 @@ public class ContactApp {
             contact.displayContact();
         }
 
-        // Displaying summary using static variables
+        // Displaying summary using static variables and functions
         System.out.println("\nSummary:");
         System.out.println("=====================================");
         System.out.println("Total Contacts Created: " + Contact.getTotalContacts());
         System.out.println("Contacts with Alternative Names: " + Contact.getContactsWithAltName());
+        System.out.printf("Percentage of Contacts with Alternative Names: %.2f%%\n", Contact.calculateAltNamePercentage());
         System.out.println("=====================================");
 
         // Cleaning up memory: simulating 'delete' by dereferencing
