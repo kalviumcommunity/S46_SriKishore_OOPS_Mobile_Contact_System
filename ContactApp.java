@@ -7,12 +7,33 @@ class Contact {
     private String email;
     private String altName;
 
+    // Static variables
+    private static int totalContacts = 0;       // Count of total contacts created
+    private static int contactsWithAltName = 0; // Count of contacts with an alternative name
+
     // Constructor to initialize Contact details
     public Contact(String name, String phoneNumber, String email, String altName) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.altName = altName;
+
+        // Increment totalContacts whenever a new Contact is created
+        totalContacts++;
+
+        // Increment contactsWithAltName if an alternative name is provided
+        if (altName != null && !altName.isEmpty()) {
+            contactsWithAltName++;
+        }
+    }
+
+    // Static methods to get the counts
+    public static int getTotalContacts() {
+        return totalContacts;
+    }
+
+    public static int getContactsWithAltName() {
+        return contactsWithAltName;
     }
 
     // Method to display contact details
@@ -49,9 +70,11 @@ public class ContactApp {
             System.out.print("Enter Phone Number: ");
             String phoneNumber = scanner.nextLine();
 
+            // Mandatory email
             System.out.print("Enter Email: ");
             String email = scanner.nextLine();
 
+            // Alternative name (optional)
             System.out.print("Enter Alternative Name (optional): ");
             String altName = scanner.nextLine();
 
@@ -64,6 +87,13 @@ public class ContactApp {
         for (Contact contact : contacts) {
             contact.displayContact();
         }
+
+        // Displaying summary using static variables
+        System.out.println("\nSummary:");
+        System.out.println("=====================================");
+        System.out.println("Total Contacts Created: " + Contact.getTotalContacts());
+        System.out.println("Contacts with Alternative Names: " + Contact.getContactsWithAltName());
+        System.out.println("=====================================");
 
         // Cleaning up memory: simulating 'delete' by dereferencing
         for (int i = 0; i < contacts.length; i++) {
