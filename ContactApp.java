@@ -2,30 +2,20 @@ import java.util.Scanner;
 
 // Class representing a Contact
 class Contact {
-    private String name;
-    private String phoneNumber;
-    private String email;
-    private String altName;
+    private String name;        // Private: Encapsulation and abstraction
+    private String phoneNumber; // Private: Implementation hidden
+    private String email;       // Private: Implementation hidden
+    private String altName;     // Private: Implementation hidden
 
-    private static int totalContacts = 0; // Static variable to count total contacts
-
-    // Constructor to initialize Contact details
+    // Constructor to initialize Contact details (public interface)
     public Contact(String name, String phoneNumber, String email, String altName) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.altName = altName;
-
-        // Increment totalContacts whenever a new Contact is created
-        totalContacts++;
     }
 
-    // Static method to get total contacts count
-    public static int getTotalContacts() {
-        return totalContacts;
-    }
-
-    // Getter and Setter for Name
+    // Public accessor and mutator for Name
     public String getName() {
         return name;
     }
@@ -34,7 +24,7 @@ class Contact {
         this.name = name;
     }
 
-    // Getter and Setter for Phone Number
+    // Public accessor and mutator for Phone Number
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -43,7 +33,7 @@ class Contact {
         this.phoneNumber = phoneNumber;
     }
 
-    // Getter and Setter for Email
+    // Public accessor and mutator for Email
     public String getEmail() {
         return email;
     }
@@ -52,36 +42,10 @@ class Contact {
         this.email = email;
     }
 
-    // Getter and Setter for Alternative Name
-    public String getAltName() {
-        return altName;
-    }
-
-    public void setAltName(String altName) {
-        this.altName = altName;
-    }
-
-    // Static method to search for a contact by name
-    public static void searchContactByName(Contact[] contacts, String searchName) {
-        boolean found = false;
-        System.out.println("\nSearching for contact with name: " + searchName);
-        for (Contact contact : contacts) {
-            if (contact.getName().equalsIgnoreCase(searchName)) {
-                contact.displayContact();
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            System.out.println("No contact found with the name: " + searchName);
-        }
-    }
-
-    // Method to display contact details
+    // Public method to display contact details (abstraction: user doesn't know internal representation)
     public void displayContact() {
         System.out.println("=====================================");
         System.out.println("Contact Details:");
-        System.out.println("=====================================");
         System.out.printf("Name: %-25s\n", this.name);
         System.out.printf("Phone Number: %-25s\n", this.phoneNumber);
         System.out.printf("Email: %-25s\n", this.email);
@@ -92,17 +56,61 @@ class Contact {
     }
 }
 
+// Class to manage contacts
+class ContactManager {
+    private Contact[] contacts; // Private: Implementation hidden from the user
+    private int contactCount = 0;
+
+    // Constructor to initialize ContactManager with the maximum number of contacts
+    public ContactManager(int maxContacts) {
+        this.contacts = new Contact[maxContacts];
+    }
+
+    // Public method to add a new contact
+    public void addContact(Contact contact) {
+        if (contactCount < contacts.length) {
+            contacts[contactCount++] = contact;
+        } else {
+            System.out.println("Cannot add more contacts, storage full!");
+        }
+    }
+
+    // Public method to display all contacts
+    public void displayAllContacts() {
+        System.out.println("\nDisplaying all contacts:");
+        for (int i = 0; i < contactCount; i++) {
+            contacts[i].displayContact();
+        }
+    }
+
+    // Public method to search for a contact by name
+    public void searchContactByName(String name) {
+        boolean found = false;
+        System.out.println("\nSearching for contact with name: " + name);
+        for (int i = 0; i < contactCount; i++) {
+            if (contacts[i].getName().equalsIgnoreCase(name)) {
+                contacts[i].displayContact();
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("No contact found with the name: " + name);
+        }
+    }
+}
+
 public class ContactApp {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("How many contacts do you want to add? ");
-        int numContacts = Integer.parseInt(scanner.nextLine());
+        System.out.print("How many contacts do you want to store? ");
+        int maxContacts = Integer.parseInt(scanner.nextLine());
 
-        // Dynamically allocating memory for Contact objects
-        Contact[] contacts = new Contact[numContacts];
+        ContactManager manager = new ContactManager(maxContacts); // Using ContactManager to abstract details
 
-        for (int i = 0; i < numContacts; i++) {
+        // Adding contacts
+        for (int i = 0; i < maxContacts; i++) {
             System.out.println("\nEnter details for contact " + (i + 1) + ":");
 
             System.out.print("Enter Name: ");
@@ -117,42 +125,18 @@ public class ContactApp {
             System.out.print("Enter Alternative Name (optional): ");
             String altName = scanner.nextLine();
 
-            // Creating each Contact dynamically
-            contacts[i] = new Contact(name, phoneNumber, email, altName);
+            // Creating contact and adding to the manager
+            Contact contact = new Contact(name, phoneNumber, email, altName);
+            manager.addContact(contact);
         }
 
         // Displaying all contacts
-        System.out.println("\nDisplaying all contacts:");
-        for (Contact contact : contacts) {
-            contact.displayContact();
-        }
+        manager.displayAllContacts();
 
-        // Demonstrating encapsulation: Updating a contact
-        System.out.print("\nEnter the index of the contact to update (1 to " + numContacts + "): ");
-        int updateIndex = Integer.parseInt(scanner.nextLine()) - 1;
-        if (updateIndex >= 0 && updateIndex < numContacts) {
-            Contact contactToUpdate = contacts[updateIndex];
-
-            System.out.println("Updating contact: " + contactToUpdate.getName());
-
-            System.out.print("Enter new Phone Number: ");
-            String newPhoneNumber = scanner.nextLine();
-            contactToUpdate.setPhoneNumber(newPhoneNumber);
-
-            System.out.print("Enter new Email: ");
-            String newEmail = scanner.nextLine();
-            contactToUpdate.setEmail(newEmail);
-
-            System.out.println("\nUpdated Contact Details:");
-            contactToUpdate.displayContact();
-        } else {
-            System.out.println("Invalid index.");
-        }
-
-        // Static function usage: Search for a contact by name
+        // Searching for a contact
         System.out.print("\nEnter a name to search for: ");
         String searchName = scanner.nextLine();
-        Contact.searchContactByName(contacts, searchName);
+        manager.searchContactByName(searchName);
 
         scanner.close();
     }
